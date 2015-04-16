@@ -20,28 +20,13 @@ switch self.name
     case 'MeanEstimator'
         self.mean=mean(y.*sample_weight);
     case 'Estimator'
-        scale = 1.0;
+        self.scale = 1.0;
         pos = sum(sample_weight * y);
         neg = sum(sample_weight * (1 - y));
         self.prior = self.scale * log(pos / neg);
     case 'QuantileEstimator'
-        self.quantile = QuantileEstimator_weighted_percentile(y, sample_weight, self.alpha * 100.0);
+        self.quantile = Estimator_Quantitle_weighted_percentile(y, sample_weight, self.alpha * 100.0);
 end
 end
-function ans=QuantileEstimator_weighted_percentile(array, sample_weight, percentile)
-% The default value of percentile is 50
 
-% 改写这里了
-%     """Compute the weighted ``percentile`` of ``array`` with ``sample_weight``. """
-%     sorted_idx = np.argsort(array)
-% 
-%     # Find index of median prediction for each sample
-%     weight_cdf = sample_weight[sorted_idx].cumsum()
-%     percentile_idx = np.searchsorted(
-%         weight_cdf, (percentile / 100.) * weight_cdf[-1])
-%     return array[sorted_idx[percentile_idx]]
-
-
-
-end
 
