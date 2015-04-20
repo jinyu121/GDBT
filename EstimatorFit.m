@@ -1,4 +1,8 @@
-function self = EstimatorFit( self, X, y, sample_weight )
+function [self,GBM] = EstimatorFit( inself,inGBM X, y, sample_weight )
+
+self=inself;
+GBM=inGBM;
+
 switch self.name
     case 'ZeroEstimator'
         if isint32(y(1))

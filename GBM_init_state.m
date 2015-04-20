@@ -1,6 +1,6 @@
 function self=GBM_init_state(inself)
 self=inself;
-if length(self.init)==0
+if len(self.init)==0
     % Todo
     % self.init_ = self.loss_.init_estimator();
 else
