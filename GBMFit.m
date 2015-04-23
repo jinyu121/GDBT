@@ -51,7 +51,7 @@ else
 end
 
 %% fit the boosting stages
-[self,n_stages]=GBM_fit_stages(self,X, y, y_pred, sample_weight, begin_at_stage);
+[self,n_stages]=GBM_fit_stages(self, X, y, y_pred, sample_weight, begin_at_stage);
 
 %% change shape of arrays after fit (early-stopping or additional ests)
 if n_stages ~= length(self.estimators_.shape)

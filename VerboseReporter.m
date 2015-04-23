@@ -1,7 +1,4 @@
-function [ output_args ] = VerboseReporter( input_args )
-%VERBOSEREPORTER Summary of this function goes here
-%   Detailed explanation goes here
-
-
+function self  = VerboseReporter( inself )
+self=inself;
 end
 

@@ -1,7 +1,6 @@
-function [ output_args ] = VerboseReporter_init( input_args )
-%VERBOSEREPORTER_INIT Summary of this function goes here
-%   Detailed explanation goes here
-
-
+function self = VerboseReporter_init( inself,inest,inbegin_at_stage )
+self=inself;
+self.verbose_mod = 1
+self.begin_at_stage = inbegin_at_stage
 end
 

@@ -1,16 +1,20 @@
 function [self,outParameter] = GBM_fit_stages( inself, X, y, y_pred, sample_weight, random_state,begin_at_stage )
+self=inself;
 % Iteratively fits the stages.
 %         For each stage it computes the progress (OOB, train score)
 %         and delegates to ``_fit_stage``.
 %         Returns the number of stages fit; might differ from ``n_estimators``
 %         due to early stopping.
-self=inself;
-do_oob = self.subsample < 1.0 ;
+%    == Do not care about the last sentence! I remove it
+n_samples = length(X);
 sample_mask=ones(1,n_samples);
+do_oob = self.subsample < 1.0 ;
 n_inbag = max(1, int(self.subsample * n_samples));
 loss_ = self.loss_
 
 % init criterion and splitter
+% Todo: How to translate them?
+%
 %         criterion = FriedmanMSE(1)
 %         splitter = PresortBestSplitter(criterion,
 %                                        self.max_features_,
@@ -18,10 +22,11 @@ loss_ = self.loss_
 %                                        self.min_weight_fraction_leaf,
 %                                        random_state)
 
-if self.verbose
-    verbose_reporter = VerboseReporter(self.verbose);
-    verbose_reporter=VerboseReporter_init(self, begin_at_stage);
-end
+% I think the whole Verbose is useless, So i deleted it!!!
+% if self.verbose
+%     verbose_reporter = VerboseReporter(self.verbose);
+%     verbose_reporter = VerboseReporter_init(self, begin_at_stage);
+% end
 
 % perform boosting iterations
 for i=begin_at_stage:1:self.n_estimators-1

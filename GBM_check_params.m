@@ -4,7 +4,6 @@ self=inself;
 % I assert your input data is right
 %%%%%%%%%% NOTICE: %%%%%%%%%%
 % self.loss are classes. So, merge them like Estimaor?
-% these classes MUST be write!!!
 % and the self.loss is a Cell
 
 if strcmp(self.loss,'deviance')
@@ -61,5 +60,8 @@ else
     else
         error('max_features must be in (0, n_features]');
     end
-    self.max_features_ = max_features;
+    
+end
+
+self.max_features_ = max_features;
 end
