@@ -15,10 +15,16 @@
 
     EstimatorFit(in GBMFit)
     EstimatorPredict(in GBMFit)
+1    Estimator_Quantitle_weighted_percentile
 
-    Loss(in GBM_check_params)
+0    LossFunction(in GBM_check_params)
+1    LossFunction_update_terminal_regions
 
-** I think the whole 'Verbose' is useless!!! **
+** I think the whole 'Verbose' is useless!!! so i deleted them all **
 
-0    VerboseReporter_init 
-0    VerboseReporter_update
+x    VerboseReporter_init 
+x    VerboseReporter_update
+
+
+0    EstimatorFit
+0    EstimatorPredict
