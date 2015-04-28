@@ -1,4 +1,4 @@
-function [ ouEstimator ] = Loss_negative_gradient( self, y, pred )
+function [ ouEstimator ] = LossFunction_negative_gradient( self, y, pred )
 self=inLossFunction;
 switch self.name
     case 'LeastSquaresError'
@@ -6,29 +6,34 @@ switch self.name
     case 'LeastAbsoluteError'
         %         """1.0 if y - pred > 0.0 else -1.0"""
         pred = Util_reval(pred);
-        ouEstimator =2.0 * (y - pred > 0.0) - 1.0;
+        ouEstimator =2.0 * (y - pred .* (pred > 0.0)) - 1.0;
     case 'HuberLossFunction'
         pred = Util_reval(pred);
         diff = y - pred;
         if isempty(sample_weight)
-            gamma = stats.scoreatpercentile(np.abs(diff), self.alpha * 100);
+            gamma = Stats_scoreatpercentile(abs(diff), self.alpha);
         else
-            gamma = _weighted_percentile(np.abs(diff), sample_weight, self.alpha * 100);
+            gamma = Stats_weighted_percentile(abs(diff), sample_weight, self.alpha );
         end
-        gamma_mask = np.abs(diff) <= gamma;
-        residual = np.zeros((y.shape[0],), dtype=np.float64);
-        residual[gamma_mask] = diff[gamma_mask];
-        residual[~gamma_mask] = gamma * np.sign(diff[~gamma_mask]);
+        gamma_mask = abs(diff) <= gamma;
+        residual = zeros(Util_shape0(y));
+        residual(gamma_mask) = diff(gamma_mask);
+        residual(~gamma_mask) = gamma .* sign(diff(~gamma_mask));
         self.gamma = gamma;
         ouEstimator= residual;
     case 'QuantileLossFunction'
-        ouEstimator=Estimeter('QuantileEstimator',self.alpha);
+        alpha = self.alpha;
+        pred = Util_reval(pred);
+        mask = y > pred;
+        ouEstimator=(alpha .* mask) - ((1.0 - alpha) .* ~mask);
     case 'BinomialDeviance'
-        ouEstimator=Estimeter('LogOddsEstimator',0);
+        pred = Util_reval(pred);
+        ouEstimator=y-Util_expit(pred);
     case 'MultinomialDeviance'
-        ouEstimator=Estimeter('PriorProbabilityEstimator',0);
+        ouEstimator=y-Util_nan_to_num(exp(pred(:,k)-Util_logsumexp(pred,1)));
     case 'ExponentialLoss'
-        ouEstimator=Estimeter('ScaledLogOddsEstimator',0);
+        y_ = -(2 .* y - 1);
+        ouEstimator=y_ .*exp(y_ .* Util_reval(pred));
 end
 end
 

@@ -1,4 +1,4 @@
-function self = LossFunction( inname, inalpha,n_classes_ )
+function self = LossFunction( inname,n_classes_ , inalpha )
 % Attributes
 %     ----------
 %     K : int

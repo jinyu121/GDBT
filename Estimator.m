@@ -7,6 +7,9 @@ switch self.name
     case 'HuberLossFunction'
         self.gamma = NaN;
         
+    case 'Estimator'
+        self.scale = 1.0;
+        
     case 'QuantileLossFunction'
         assert( 0 < self.alpha && self.alpha< 1.0);
         self.alpha = alpha;

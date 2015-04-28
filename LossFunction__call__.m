@@ -27,10 +27,10 @@ switch self.name
                 gamma = Stats_weighted_percentile(abs(diff), sample_weight, self.alpha);
             end
         end
-        gamma_mask=zeros(1,length(diff));
-        gamma_mask = gamma_mask(abs(diff) <= gamma);
+        % gamma_mask=zeros(1,length(diff));
+        gamma_mask = abs(diff) <= gamma;
         if isenpty(sample_weight )
-            sq_loss = sum(0.5 .* diff(gamma_mask) .^ 2.0);
+            sq_loss = sum(0.5 .* (diff(gamma_mask)) .^ 2.0);
             lin_loss = sum(gamma .* (abs(diff(~gamma_mask)) - gamma ./ 2.0));
             yshape=Util_shape0(y);
             ouEstimator = (sq_loss + lin_loss) ./ yshape;
@@ -46,9 +46,9 @@ switch self.name
         
         mask = y > pred;
         if isempty( sample_weight)
-            ouEstimator = (alpha * sum(diff(mask)) +(1.0 - alpha) * sum(diff(~mask))) / Util_shape0(y);
+            ouEstimator = ((alpha * sum(diff(mask)) +(1.0 - alpha) * sum(diff(~mask)))) / Util_shape0(y);
         else
-            ouEstimator = ((alpha * sum(sample_weight(mask) * diff(mask)) +(1.0 - alpha) * sum(sample_weight(~mask) * diff(~mask))) /sum(sample_weight))
+            ouEstimator = ((alpha * sum(sample_weight(mask) .* diff(mask)) +(1.0 - alpha) .* sum(sample_weight(~mask) .* diff(~mask))) /sum(sample_weight));
         end
     case 'BinomialDeviance'
         %         """Compute the deviance (= 2 * negative log-likelihood). """
@@ -66,7 +66,7 @@ switch self.name
             Y(:,k) = (y == k)
         end
         if isempty(sample_weight )
-            ouEstimator= sum(-1 * sum((Y * pred),1) +Util_logsumexp(pred, 1,1))
+            ouEstimator= sum(-1 * sum((Y * pred),1) +Util_logsumexp(pred, 1,1));
         else
             ouEstimator= np.sum(-1 * sample_weight * sum((Y * pred),1) + Util_logsumexp(pred, 1,1));
         end
@@ -75,7 +75,7 @@ switch self.name
         if isempty(sample_weight)
             ouEstimator= mean(exp(-(2. * y - 1.) * pred));
         else
-            ouEstimator= (1.0 / sum(sample_weight)) *sum(sample_weight * exp(-(2 * y - 1) * pred)));
+            ouEstimator= (1.0 / sum(sample_weight)) *sum(sample_weight * exp(-(2 * y - 1) * pred));
         end
 end
 

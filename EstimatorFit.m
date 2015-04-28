@@ -4,13 +4,25 @@ self=inself;
 
 switch self.name
     case 'QuantileEstimator'
-        self.quantile = Stats_Quantitle_weighted_percentile(self,y, sample_weight, self.alpha * 100.0);
+        if isempty(sample_weight)
+            self.quantile = Stats_scoreatpercentile(y, self.alpha)
+        else
+            self.quantile = Stats_weighted_percentile(self,y, sample_weight, self.alpha * 100.0);
+        end
     case 'MeanEstimator'
-        self.mean=mean(y.*sample_weight);
+        if isempty(sample_weight)
+            self.mean = mean(y);
+        else
+            self.mean=mean(y.*sample_weight);
+        end
     case 'Estimator'
-        self.scale = 1.0;
+        if isempty(sample_weight)
+            pos = sum(y);
+            neg =Util_shape0( y)- pos;
+        else
         pos = sum(sample_weight * y);
         neg = sum(sample_weight * (1 - y));
+        end
         if neg == 0 || pos == 0
             error('y contains non binary labels.')
         end
@@ -19,7 +31,9 @@ switch self.name
     case 'ScaledLogOddsEstimator'
         self.scale = 0.5
     case 'PriorProbabilityEstimator'
-        % Todo: T'm not sure if this is right...
+        if isempty(sample_weight)
+            sample_weight = np.ones_like(y, dtype=np.float64);
+        end
         class_counts=histc(y.*sample_weight);
         self.priors = class_counts / sum(class_counts);
     case 'ZeroEstimator'

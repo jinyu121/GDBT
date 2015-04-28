@@ -3,39 +3,47 @@ self=inself;
 %% Check validity of parameters and raise ValueError if not valid.
 % I assert your input data is right
 %%%%%%%%%% NOTICE: %%%%%%%%%%
-% self.loss are classes. So, merge them like Estimaor?
 % and the self.loss is a Cell
 
+if self.n_estimators <= 0
+    error('n_estimators must be greater than 0');
+end
+
+if self.learning_rate <= 0.0
+    error('learning_rate must be greater than 0');
+end
+
 if strcmp(self.loss,'deviance')
-    %     if len(self.classes_) > 2
     if length(self.classes_)>2
         % Todo
-        self.loss='MultinomialDeviance';
+        loss_class=LossFunction('MultinomialDeviance');
     else
         % Todo
-        self.loss='BinomialDeviance';
+        loss_class=LossFunction('BinomialDeviance');
     end
 else
     switch self.loss
         case 'ls'
-            self.loss='LeastSquaresError';
+            loss_class=LossFunction('LeastSquaresError',self.n_classes_,NaN);
         case 'lad'
-            self.loss='LeastAbsoluteError';
+            loss_class=LossFunction('LeastAbsoluteError',self.n_classes_,NaN);
         case 'huber'
-            self.loss='HuberLossFunction';
+            loss_class=LossFunction('HuberLossFunction',self.n_classes_, self.alpha);
         case 'quantile'
-            self.loss='QuantileLossFunction';
+            loss_class=LossFunction('QuantileLossFunction',self.n_classes_, self.alpha);
         case 'exponential'
-            self.loss='ExponentialLoss';
+            loss_class=LossFunction('ExponentialLoss',self.n_classes_,NaN);
     end
 end
 
-if strcmp(self.loss,'HuberLossFunction') || strcmp(self.loss,'QuantileLossFunction')
-    % Todo
-    self.loss_=Loss(self.loss,self.n_classes_, self.alpha);
-else
-    % Todo
-    self.loss_=Loss(self.loss,self.n_classes_,NaN);
+if ~(0.0 < self.subsample && self.subsample<= 1.0)
+    error('subsample must be in (0,1]');
+end
+
+% self.init 的判断我不知道该怎么写……就掠过吧
+
+if ~(0.0 < self.alpha && self.alpha < 1.0)
+    error('alpha must be in (0.0, 1.0)')
 end
 
 if isempty(self.max_features)
@@ -52,6 +60,8 @@ elseif strcmp(self.max_features , 'sqrt')
     max_features = max(1, int32(sqrt(self.n_features)));
 elseif strcmp(self.max_features , 'log2')
     max_features = max(1, int32(log2(self.n_features)));
+elseif isnan(self.max_features)
+    max_features = self.n_features;
 elseif self.max_features>1
     max_features = self.max_features;
 else
