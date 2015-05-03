@@ -1,6 +1,11 @@
 0: Checked
 1: some Todo s not be write
 
+1   GBM_fit_stages
+1   GBM__decision_function  predict_stage怎么办？
+1   GBM_staged_decision_function yield怎么改啊！
+1   GBM_feature_importances_ 看不懂
+
 0   Estimator
 0   EstimatorFit
 0   EstimatorPredict
