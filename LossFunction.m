@@ -8,7 +8,7 @@ function self = LossFunction( inname,n_classes_ , inalpha )
 %     """
 self.name=inname;
 self.alpha=inalpha;
-self.K=n_classes_;
+self.K=n_classes;
 self.is_multi_class = False;
 end
 

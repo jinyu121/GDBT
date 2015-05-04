@@ -1,33 +1,23 @@
-function self = Estimator( inName,inAlpha )
-% if name='Quantile', we use alpha
+function self = Estimator( inName,para )
+% if name='QuantileEstimator', we use alpha
+% else, para=nan
 self.name=inName;
-self.alpha=inAlpha;
+
 switch self.name
     % RegressionLossFunction
-    case 'HuberLossFunction'
-        self.gamma = NaN;
-        
-    case 'Estimator'
-        self.scale = 1.0;
-        
-    case 'QuantileLossFunction'
-        assert( 0 < self.alpha && self.alpha< 1.0);
+    case 'QuantileEstimator'
+        self.alpha=para;
+        if ~( 0 < self.alpha && self.alpha< 1.0)
+            error('alpha` must be in (0, 1.0)');
+        end
         self.alpha = alpha;
-        self.percentile = alpha * 100.0;
-        
-    % ClassificationLossFunction
-    case 'BinomialDeviance'
-        if n_classes ~= 2
-            error('BinomialDeviance requires 2 classes');
-        end
-    case 'MultinomialDeviance'
-        if n_classes < 3
-            error('MultinomialDeviance requires more than classes');
-        end
-    case 'ExponentialLoss'
-        if n_classes ~= 2
-            error('ExponentialLoss requires 2 classes');
-        end
+%         self.percentile = alpha * 100.0;
+    case 'LogOddsEstimator'
+        self.scale=1.0;
+    case 'y=y.*self.prior;'
+        self.scale=0.5;
+    case 'ScaledLogOddsEstimator'
+        self.scale = 0.5;
 end
 end
 

@@ -11,14 +11,18 @@ switch self.name
     case 'MeanEstimator'
         y=y.*self.mean;
         
-    case 'Estimator'
+    case 'LogOddsEstimator'
         y=y.*self.prior;
+        
+    case 'ScaledLogOddsEstimator'
+        y=y.*self.prior;
+        
+    case 'PriorProbabilityEstimator'
+        y = ones(Util_shape0(X), Util_shape0(self.priors)).*self.priors;
         
     case 'ZeroEstimator'
         y=y.*0;
         
-    case 'PriorProbabilityEstimator'
-        %         可能不对
-        y = ones(Util_shape0(X), Util_shape0(self.priors.shape)).*self.priors;
 end
+
 end
