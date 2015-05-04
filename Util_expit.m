@@ -1,7 +1,6 @@
-function [ output_args ] = Util_expit( input_args )
-%UTIL_EXPIT Summary of this function goes here
-%   Detailed explanation goes here
+function [ y ] = Util_expit( x )
 
+y=1./(1+exp(-x));
 
 end
 
