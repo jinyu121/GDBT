@@ -1,12 +1,9 @@
-function [self,y]=GBM_decision_function(inself,X)
+function [self,score]=GBM_decision_function(inself,X)
 self=inself;
 % I merged all the decision function to here
 score=GBM__decision_function(self,X);
-ScoreShape=size(score);
-if (ScoreShape(2)==1)
-    y=Util_reval(score);
-else
-    y=score;
+if (Util_shape(score,1)==1)
+    score=Util_reval(score);
 end
 
 end

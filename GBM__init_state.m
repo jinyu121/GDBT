@@ -1,5 +1,5 @@
-function self=GBM_init_state(inself)
-self=inself;
+function self=GBM__init_state(inGBM)
+self=inGBM;
 if isempty(self.init)
     self.init_ = LossFunction_init_estimator(self.loss);
 elseif ischar(self.init)

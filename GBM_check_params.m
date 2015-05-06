@@ -15,24 +15,22 @@ end
 
 if strcmp(self.loss,'deviance')
     if length(self.classes_)>2
-        % Todo
-        loss_class=LossFunction('MultinomialDeviance');
+        self.loss_=LossFunction('MultinomialDeviance',self.n_classes_,NaN);
     else
-        % Todo
-        loss_class=LossFunction('BinomialDeviance');
+        self.loss_=LossFunction('BinomialDeviance',self.n_classes_,NaN);
     end
 else
     switch self.loss
         case 'ls'
-            loss_class=LossFunction('LeastSquaresError',self.n_classes_,NaN);
+            self.loss_=LossFunction('LeastSquaresError',self.n_classes_,NaN);
         case 'lad'
-            loss_class=LossFunction('LeastAbsoluteError',self.n_classes_,NaN);
+            self.loss_=LossFunction('LeastAbsoluteError',self.n_classes_,NaN);
         case 'huber'
-            loss_class=LossFunction('HuberLossFunction',self.n_classes_, self.alpha);
+            self.loss_.loss_=LossFunction('HuberLossFunction',self.n_classes_, self.alpha);
         case 'quantile'
-            loss_class=LossFunction('QuantileLossFunction',self.n_classes_, self.alpha);
+            self.loss_=LossFunction('QuantileLossFunction',self.n_classes_, self.alpha);
         case 'exponential'
-            loss_class=LossFunction('ExponentialLoss',self.n_classes_,NaN);
+            self.loss_=LossFunction('ExponentialLoss',self.n_classes_,NaN);
     end
 end
 
@@ -40,14 +38,12 @@ if ~(0.0 < self.subsample && self.subsample<= 1.0)
     error('subsample must be in (0,1]');
 end
 
-% self.init 的判断我不知道该怎么写……就掠过吧
-
 if ~(0.0 < self.alpha && self.alpha < 1.0)
     error('alpha must be in (0.0, 1.0)')
 end
 
 if isempty(self.max_features)
-    max_features = self.n_features
+    max_features = self.n_features;
 elseif strcmp(self.max_features,'auto')
     if self.n_classes_ > 1
         % # if is_classification
@@ -74,4 +70,5 @@ else
 end
 
 self.max_features_ = max_features;
+
 end

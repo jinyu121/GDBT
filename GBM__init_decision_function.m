@@ -1,14 +1,12 @@
-function [ score ] = GBM_init_decision_function( inself,X )
+function [ score ] = GBM__init_decision_function( inself,X )
 self=inself;
 
 %% """Check input and compute prediction of ``init``. """
-if isempty(self.estimators_) 
+if Util_is_none(self.estimators_)
     error('Estimator not fitted, call `fit` before making predictions`.')
 end
 
-% size(X)(2) or length(x)?
-Xshape=size(X);
-if Xshape(2) ~= self.n_features
+if Util_shape(X,1) ~= self.n_features
     error('Shape not match');
 end
 score = EstimatorPredict(self.init_,X);

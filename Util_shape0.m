@@ -1,4 +1,4 @@
-function [ n ] = Util_size2( x )
+function [ n ] = Util_shape0( x )
 [unuse,n]=size(x);
 end
 

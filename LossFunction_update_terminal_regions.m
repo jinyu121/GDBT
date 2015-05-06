@@ -1,6 +1,5 @@
 function [ self ] = LossFunction_update_terminal_regions( in_LossFunction, tree, X, y, residual, y_pred,sample_weight, sample_mask,learning_rate, k )
 self=in_LossFunction;
-self=inLossFunction;
 if strcmp(self.name,'LeastSquaresError')
     y_pred(:, k) = y_pred(:, k)+learning_rate .* Util_reval(TreePredict(tree,X));
 else
@@ -12,9 +11,9 @@ else
     
     % Todo: And There???
     for leaf=1:1:length(tree.Children)
-        LossFunction_update_terminal_region(self,tree, masked_terminal_regions, ...
+        LossFunction__update_terminal_region(self,tree, masked_terminal_regions, ...
                 tree.Children(leaf), X, y, residual, ...
-                y_pred[:, k], sample_weight);
+                y_pred(:, k), sample_weight);
         
         treevaluetake=tree.value(:, 0, 0);
         y_pred(:, k) = y_pred(:, k)+ (learning_rate .* treevaluetake(terminal_regions,:));
