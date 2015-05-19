@@ -7,6 +7,8 @@ if Util_is_none(self.estimators_)
 end
 
 if Util_shape(X,1) ~= self.n_features
+    Util_shape(X,1)
+    self.n_features
     error('Shape not match');
 end
 score = EstimatorPredict(self.init_,X);

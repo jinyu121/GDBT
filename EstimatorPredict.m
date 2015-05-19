@@ -1,7 +1,7 @@
 function y = EstimatorPredict( inself,X )
 self=inself;
 
-size_x=Util_shape0(X);
+size_x=Util_shape(X,0);
 y=ones(size_x,1);
 
 switch self.name
@@ -18,7 +18,7 @@ switch self.name
         y=y.*self.prior;
         
     case 'PriorProbabilityEstimator'
-        y = ones(Util_shape0(X), Util_shape0(self.priors)).*self.priors;
+        y = ones(Util_shape(X,0), Util_shape(self.priors,0))*self.priors;
         
     case 'ZeroEstimator'
         y=y.*0;

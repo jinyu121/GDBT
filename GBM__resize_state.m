@@ -3,7 +3,7 @@ self=inself;
 % % Add additional ``n_estimators`` entries to all attributes.
 % # self.n_estimators is the number of additional est to fit
 total_n_estimators = self.n_estimators;
-if total_n_estimators < Util_shape0(self.estimators_)
+if total_n_estimators < Util_shape(self.estimators_,0)
     error('resize with smaller n_estimators');
 end
 

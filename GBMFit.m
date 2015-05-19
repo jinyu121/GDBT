@@ -12,7 +12,6 @@ end
 
 [n_samples, self.n_features] = size(X);
 
-
 if isempty(sample_weight)
     sample_weight=ones(1,n_samples);
 else
@@ -23,21 +22,22 @@ end
 
 self=GBM_check_params(self);
 
+
 %% initialize
 if ~GBM_is_initialized(self)
     % init state
     self=GBM__init_state(self);
-    [self.init_, self]=EstimatorFit(self.init_,self,X,y,simple_weight);
+    self.init_=EstimatorFit(self.init_,X,y,sample_weight);
     
     % init predictions
-    [self.init_, y_pred]=EstimatorPredict(self.init_,self,X);
+    y_pred=EstimatorPredict(self.init_,X);
     
     begin_at_stage = 0;
 else
-    if self.n_estimators < Util_shape0(self.estimators_)
+    if self.n_estimators < Util_shape(self.estimators_,0)
         error('n_estimators must be larger or equal to estimators_.shape')
     end
-    begin_at_stage = Util_shape0(self.estimators_);
+    begin_at_stage = Util_shape(self.estimators_,0);
     [self,y_pred] = GBM_decision_function(self,X);
     self=GBM_resize_state(self);
 end
@@ -46,7 +46,7 @@ end
 [self,n_stages]=GBM__fit_stages(self, X, y, y_pred, sample_weight, begin_at_stage);
 
 %% change shape of arrays after fit (early-stopping or additional ests)
-if n_stages ~= Util_shape0(self.estimators_)
+if n_stages ~= Util_shape(self.estimators_,0)
     self.estimators_ = self.estimators_(1:n_stages,:);
     self.train_score_ = self.train_score_(1:n_stages,:);
     if ~isempty(self.oob_improvement_)

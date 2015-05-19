@@ -9,7 +9,7 @@ function self = LossFunction( inname,n_classes , inalpha )
 
 self.name=inname;
 self.K=n_classes;
-self.is_multi_class = False;
+self.is_multi_class = false;
 
 if strcmp(self.name,'LeastSquaresError') || ...
         strcmp(self.name,'LeastAbsoluteError') || ...
@@ -35,7 +35,7 @@ switch self.name
             error('BinomialDeviance requires 2 classes.');
         end
     case 'MultinomialDeviance'
-        self.is_multi_class = True;
+        self.is_multi_class = true;
         if n_classes < 3
             error('MultinomialDeviance requires more than 2 classes.');
         end

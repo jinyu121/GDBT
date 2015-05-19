@@ -1,4 +1,4 @@
-function [ ouEstimator ] = LossFunction_negative_gradient( inLossFunction, y, pred )
+function [ ouEstimator ] = LossFunction_negative_gradient( inLossFunction, y, pred,k,sample_weight )
 self=inLossFunction;
 switch self.name
     case 'LeastSquaresError'
@@ -15,7 +15,7 @@ switch self.name
             gamma = Stats_weighted_percentile(abs(diff), sample_weight, self.alpha );
         end
         gamma_mask = abs(diff) <= gamma;
-        residual = zeros(1,Util_shape0(y));
+        residual = zeros(1,Util_shape(y,0));
         residual(gamma_mask) = diff(gamma_mask);
         residual(~gamma_mask) = gamma .* sign(diff(~gamma_mask));
         self.gamma = gamma;
@@ -28,8 +28,7 @@ switch self.name
     case 'BinomialDeviance'
         ouEstimator=y-Util_expit(Util_reval(pred));
     case 'MultinomialDeviance'
-        ouEstimator=y-Util_nan_to_num(exp(pred(:,k)- ...
-                                        Util_logsumexp(pred,1)));
+        ouEstimator=y-Util_nan_to_num(exp(pred(:,k)-Util_logsumexp(pred,1,[])));
     case 'ExponentialLoss'
         y_ = -(2 .* y - 1);
         ouEstimator=y_ .*exp(y_ .* Util_reval(pred));

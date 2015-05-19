@@ -20,7 +20,7 @@ switch self.name
     case 'LogOddsEstimator'
         if isempty(sample_weight)
             pos = sum(y);
-            neg =Util_shape0( y)- pos;
+            neg =Util_shape( y,0)- pos;
         else
             pos = sum(sample_weight * y);
             neg = sum(sample_weight * (1 - y));
@@ -33,7 +33,7 @@ switch self.name
     case 'ScaledLogOddsEstimator'
         if isempty(sample_weight)
             pos = sum(y);
-            neg =Util_shape0( y)- pos;
+            neg =Util_shape( y,0)- pos;
         else
             pos = sum(sample_weight * y);
             neg = sum(sample_weight * (1 - y));
@@ -47,13 +47,13 @@ switch self.name
         if isempty(sample_weight)
             sample_weight = Util_ones_like(y);
         end
-        class_counts=histc(y.*sample_weight);
+        class_counts=histc(y.*sample_weight,1:1:max(y.*sample_weight));
         self.priors = class_counts / sum(class_counts);
         
     case 'ZeroEstimator'
         if isint32(y(1))
             % classification
-            self.n_classes=Util_shape0(unique(y));
+            self.n_classes=Util_shape(unique(y),0);
             if self.n_classes == 2
                 self.n_classes = 1;
             end

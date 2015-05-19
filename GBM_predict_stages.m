@@ -1,5 +1,5 @@
 function [ ret ] = GBM_predict_stages( estimators,X,scale,out )
-n_estimators=Util_shape0(estimators);
+n_estimators=Util_shape(estimators,0);
 K=Util_shape(estimators,1);
 for i=1:1:n_estimators
     tree=estimators(i,K).tree_;

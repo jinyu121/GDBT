@@ -1,6 +1,6 @@
-function [self,outParameter] = GBM__fit_stages( inself, X, y, y_pred, sample_weight, random_state,begin_at_stage )
+function [self,outParameter] = GBM__fit_stages( inself, X, y, y_pred, sample_weight, begin_at_stage )
 self=inself;
-n_samples = Util_shape0(X);
+n_samples = Util_shape(X,0);
 do_oob = self.subsample < 1.0 ;
 sample_mask=ones(1,n_samples);
 n_inbag = max(1, floor(self.subsample * n_samples));
@@ -22,6 +22,11 @@ end
 %                                        self.min_weight_fraction_leaf,
 %                                        random_state)
 
+%%%%% THIS IS FAKE!!!
+criterion=nan;
+splitter=nan;
+%%%%% THIS IS FAKE!!!
+
 if self.verbose
      verbose_reporter = VerboseReporter(self.verbose);
      verbose_reporter = VerboseReporter_init(verbose_reporter,self, begin_at_stage);
@@ -36,7 +41,7 @@ for i=begin_at_stage:1:self.n_estimators
         old_oob_score = LossFunction__call__(loss_,y(~sample_mask),y_pred(~sample_mask),sample_weight(~sample_mask));
     end
     %     fit next stage of trees
-    y_pred = GBM_fit_stage(i, X, y, y_pred, sample_weight,sample_mask, criterion, splitter);
+    y_pred = GBM__fit_stage(self, i, X, y, y_pred, sample_weight,sample_mask, criterion, splitter);
     %     track deviance (= loss)
     if do_oob
         self.train_score_(i) = LossFunction__call__(loss_,y(sample_mask),y_pred(sample_mask),sample_weight(sample_mask));

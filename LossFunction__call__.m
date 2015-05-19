@@ -31,7 +31,7 @@ switch self.name
         if isempty(sample_weight )
             sq_loss = sum(0.5 .* (diff(gamma_mask)) .^ 2.0);
             lin_loss = sum(gamma .* (abs(diff(~gamma_mask)) - gamma ./ 2.0));
-            yshape=Util_shape0(y);
+            yshape=Util_shape(y,0);
             ouEstimator = (sq_loss + lin_loss) ./ yshape;
         else
             sq_loss = sum(0.5 .* sample_weight(gamma_mask) .* diff(gamma_mask) .^ 2.0);
@@ -46,7 +46,7 @@ switch self.name
         mask = y > pred;
         if isempty( sample_weight)
             ouEstimator = ((alpha * sum(diff(mask)) + ...
-                (1.0 - alpha) * sum(diff(~mask)))) / Util_shape0(y);
+                (1.0 - alpha) * sum(diff(~mask)))) / Util_shape(y,0);
         else
             ouEstimator = ((alpha * sum(sample_weight(mask) .* diff(mask)) + ...
                 (1.0 - alpha) .* sum(sample_weight(~mask) .* diff(~mask))) / ...
@@ -64,7 +64,7 @@ switch self.name
         end
     case 'MultinomialDeviance'
         %         # create one-hot label encoding
-        Y = zeros(Util_shape0(y), self.K);
+        Y = zeros(Util_shape(y,0), self.K);
         for k =1:1:self.K
             Y(:,k) = (y == k);
         end

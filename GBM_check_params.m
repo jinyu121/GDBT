@@ -38,7 +38,7 @@ if ~(0.0 < self.subsample && self.subsample<= 1.0)
     error('subsample must be in (0,1]');
 end
 
-if ~(0.0 < self.alpha && self.alpha < 1.0)
+if ~(0.0 < self.alpha && 1.0 > self.alpha)
     error('alpha must be in (0.0, 1.0)')
 end
 

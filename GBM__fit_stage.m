@@ -1,4 +1,4 @@
-function [ self,y_pred ] = GBM__fit_stage( inself, i, X, y, y_pred, sample_weight, sample_mask,criterion, splitter, random_state )
+function [ self,y_pred ] = GBM__fit_stage( inself, i, X, y, y_pred, sample_weight, sample_mask,criterion, splitter )
 self=inself;
 loss = self.loss_;
 original_y = y;
