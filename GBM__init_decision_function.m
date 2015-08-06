@@ -1,5 +1,5 @@
-function [ score ] = GBM__init_decision_function( inself,X )
-self=inself;
+function [ score ] = GBM__init_decision_function( ingbm,X )
+self=ingbm;
 
 %% """Check input and compute prediction of ``init``. """
 if Util_is_none(self.estimators_)
@@ -14,4 +14,3 @@ end
 score = EstimatorPredict(self.init_,X);
 
 end
-

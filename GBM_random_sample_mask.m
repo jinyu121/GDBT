@@ -1,5 +1,5 @@
-function [ self,sample_mask ] = GBM_random_sample_mask( inself,n_total_samples,n_total_in_bag, )
-self=inself;
+function [ self,sample_mask ] = GBM_random_sample_mask( ingbm,n_total_samples,n_total_in_bag, )
+self=ingbm;
 
 % Todo: the data class is int or double?
 randData=rand(1,n_total_samples);
@@ -13,4 +13,3 @@ for i=1:1:n_total_samples
 end
 
 end
-

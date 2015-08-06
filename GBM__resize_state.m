@@ -1,5 +1,5 @@
-function self = GBM__resize_state( inself )
-self=inself;
+function self = GBM__resize_state( ingbm )
+self=ingbm;
 % % Add additional ``n_estimators`` entries to all attributes.
 % # self.n_estimators is the number of additional est to fit
 total_n_estimators = self.n_estimators;

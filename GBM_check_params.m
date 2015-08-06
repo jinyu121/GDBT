@@ -1,9 +1,8 @@
-function self=GBM_check_params(inself)
-self=inself;
+function self=GBM_check_params(ingbm)
+self=ingbm;
 %% Check validity of parameters and raise ValueError if not valid.
 % I assert your input data is right
 %%%%%%%%%% NOTICE: %%%%%%%%%%
-% and the self.loss is a Cell
 
 if self.n_estimators <= 0
     error('n_estimators must be greater than 0');
@@ -66,7 +65,7 @@ else
     else
         error('max_features must be in (0, n_features]');
     end
-    
+
 end
 
 self.max_features_ = max_features;

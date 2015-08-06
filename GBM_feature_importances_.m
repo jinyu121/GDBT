@@ -1,4 +1,4 @@
-function [ importances ] = GBM_feature_importances_( inself )
+function [ importances ] = GBM_feature_importances_( ingbm )
 
 if isempty(self.estimators_)
     error('Estimator not fitted, call fit before feature_importances_ .');
@@ -14,4 +14,3 @@ end
 importances = total_sum / length(self.estimators_);
 
 end
-

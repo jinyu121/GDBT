@@ -17,4 +17,3 @@ switch self.name
         ouEstimator=Estimeter('ScaledLogOddsEstimator',nan);
 end
 end
-

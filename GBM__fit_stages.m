@@ -1,5 +1,5 @@
-function [self,outParameter] = GBM__fit_stages( inself, X, y, y_pred, sample_weight, begin_at_stage )
-self=inself;
+function [self,outParameter] = GBM__fit_stages( ingbm, X, y, y_pred, sample_weight, begin_at_stage )
+self=ingbm;
 n_samples = Util_shape(X,0);
 do_oob = self.subsample < 1.0 ;
 sample_mask=ones(1,n_samples);
@@ -33,15 +33,17 @@ if self.verbose
 end
 
 % perform boosting iterations
-for i=begin_at_stage:1:self.n_estimators
+for i=begin_at_stage+1:1:self.n_estimators
     %     subsampling
     if do_oob
-        sample_mask = GBM__random_sample_mask(n_samples, n_inbag);
+        sample_mask = Util__random_sample_mask(n_samples, n_inbag);
         %         OOB score before adding this stage
         old_oob_score = LossFunction__call__(loss_,y(~sample_mask),y_pred(~sample_mask),sample_weight(~sample_mask));
     end
+    
     %     fit next stage of trees
-    y_pred = GBM__fit_stage(self, i, X, y, y_pred, sample_weight,sample_mask, criterion, splitter);
+    [self,y_pred] = GBM__fit_stage(self, i, X, y, y_pred, sample_weight,sample_mask, criterion, splitter);
+    
     %     track deviance (= loss)
     if do_oob
         self.train_score_(i) = LossFunction__call__(loss_,y(sample_mask),y_pred(sample_mask),sample_weight(sample_mask));
@@ -49,11 +51,10 @@ for i=begin_at_stage:1:self.n_estimators
     else
         %         no need to fancy index w/ no subsampling
         self.train_score_(i) = LossFunction__call__(loss_,y, y_pred, sample_weight);
-    end
-    if self.verbose > 0
-        [verbose_reporter,self]=VerboseReporter_update(verbose_reporter,i, self);
-    end
+      end
+%     if self.verbose > 0
+%         [verbose_reporter,self]=VerboseReporter_update(verbose_reporter,i, self);
+%     end
 end
 outParameter=i+1;
 end
-

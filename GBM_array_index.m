@@ -8,4 +8,3 @@ for i=1:1:n
     end
 end
 end
-

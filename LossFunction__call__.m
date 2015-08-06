@@ -5,18 +5,18 @@ self=inLossFunction;
 switch self.name
     case 'LeastSquaresError'
         if isempty(sample_weight)
-            ouEstimator= mean((y - Util_reval(pred)) .^ 2.0);
+            ouEstimator= mean((y - Util_ravel(pred)) .^ 2.0);
         else
-            ouEstimator=(1.0 ./ sum(sample_weight) .*sum(sample_weight .* ((y - Util_reval(pred)) .^ 2.0)));
+            ouEstimator=(1.0 ./ sum(sample_weight) .*sum(sample_weight .* ((y - Util_ravel(pred)) .^ 2.0)));
         end
     case 'LeastAbsoluteError'
         if isempty(sample_weight)
-            ouEstimator=mean(abs(y - Util_reval(pred)));
+            ouEstimator=mean(abs(y - Util_ravel(pred)));
         else
-            ouEstimator=(1.0 ./ sum(sample_weight) .*sum(sample_weight .* abs(y - Util_reval(pred))));
+            ouEstimator=(1.0 ./ sum(sample_weight) .*sum(sample_weight .* abs(y - Util_ravel(pred))));
         end
     case 'HuberLossFunction'
-        pred = Util_reval(pred);
+        pred = Util_ravel(pred);
         diff = y - pred;
         gamma = self.gamma;
         if isnan(self.gamma)
@@ -39,10 +39,10 @@ switch self.name
             ouEstimator = (sq_loss + lin_loss) / sum(sample_weight);
         end
     case 'QuantileLossFunction'
-        pred = Util_reval(pred);
+        pred = Util_ravel(pred);
         diff = y - pred;
         alpha = self.alpha;
-        
+
         mask = y > pred;
         if isempty( sample_weight)
             ouEstimator = ((alpha * sum(diff(mask)) + ...
@@ -55,7 +55,7 @@ switch self.name
     case 'BinomialDeviance'
         %         """Compute the deviance (= 2 * negative log-likelihood). """
         %         # logaddexp(0, v) == log(1.0 + exp(v))
-        pred = Util_reval(pred);
+        pred = Util_ravel(pred);
         if isempty(sample_weight)
             ouEstimator= -2.0 .* mean((y .* pred) - Util_logaddexp(0.0, pred));
         else
@@ -64,19 +64,17 @@ switch self.name
         end
     case 'MultinomialDeviance'
         %         # create one-hot label encoding
-        Y = zeros(Util_shape(y,0), self.K);
+        Y = zeros(Util_shape(y,1), self.K);
         for k =1:1:self.K
-            Y(:,k) = (y == k);
+            Y(:,k) = (y == k)';
         end
         if isempty(sample_weight )
-            ouEstimator= sum(-1 * sum((Y * pred),1) + ...
-                                Util_logsumexp(pred, 1,1));
+            ouEstimator= sum(-1 .* sum((Y .* pred),2) + Util_logsumexp(pred, 1)');
         else
-            ouEstimator= sum(-1 * sample_weight * sum((Y * pred),1) + ...
-                                Util_logsumexp(pred, 1,1));
+            ouEstimator= sum(-1 .* sample_weight' .* sum((Y .* pred),2) + Util_logsumexp(pred, 1)');
         end
     case 'ExponentialLoss'
-        pred = Util_reval(pred);
+        pred = Util_ravel(pred);
         if isempty(sample_weight)
             ouEstimator= mean(exp(-(2. * y - 1.) * pred));
         else
@@ -86,4 +84,3 @@ switch self.name
 end
 
 end
-

@@ -38,4 +38,3 @@ self.oob_improvement_=[];
 self.train_score_=[];
 self.loss_=cell(0,0);
 end
-

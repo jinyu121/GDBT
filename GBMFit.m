@@ -1,6 +1,8 @@
-function self = GBMFit( inself,X,y,sample_weight )
+function self = GBMFit( ingbm,X,y,sample_weight )
 
-self=inself;
+self=ingbm;
+
+y=y'; % To make y as a column-vector
 
 %% if not warmstart - clear the estimator state
 if ~self.warm_start
@@ -8,20 +10,20 @@ if ~self.warm_start
 end
 
 %% Check input
-% I assert that your input is right
+
+[X,y]=Util_check_X_y(X,y);
 
 [n_samples, self.n_features] = size(X);
 
 if isempty(sample_weight)
     sample_weight=ones(1,n_samples);
 else
-    sample_weight=Util_reval(sample_weight);
+    sample_weight=Util_column_or_1d(sample_weight);
 end
 
 [self,y]=GBM__validate_y(self,y);
 
 self=GBM_check_params(self);
-
 
 %% initialize
 if ~GBM_is_initialized(self)
@@ -31,14 +33,14 @@ if ~GBM_is_initialized(self)
     
     % init predictions
     y_pred=EstimatorPredict(self.init_,X);
-    
+
     begin_at_stage = 0;
 else
     if self.n_estimators < Util_shape(self.estimators_,0)
         error('n_estimators must be larger or equal to estimators_.shape')
     end
     begin_at_stage = Util_shape(self.estimators_,0);
-    [self,y_pred] = GBM_decision_function(self,X);
+    [self,y_pred] = GBM_decision_function(self,X); %可能在这里会有问题
     self=GBM_resize_state(self);
 end
 
@@ -46,7 +48,7 @@ end
 [self,n_stages]=GBM__fit_stages(self, X, y, y_pred, sample_weight, begin_at_stage);
 
 %% change shape of arrays after fit (early-stopping or additional ests)
-if n_stages ~= Util_shape(self.estimators_,0)
+if n_stages <= Util_shape(self.estimators_,0)
     self.estimators_ = self.estimators_(1:n_stages,:);
     self.train_score_ = self.train_score_(1:n_stages,:);
     if ~isempty(self.oob_improvement_)
@@ -55,5 +57,3 @@ if n_stages ~= Util_shape(self.estimators_,0)
 end
 
 end
-
-

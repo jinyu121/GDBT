@@ -1,8 +1,7 @@
-function [ self,y ] = GBM__validate_y( inself,Y )
-self=inself;
+function [ self,y ] = GBM__validate_y( ingbm,Y )
+self=ingbm;
 if strcmp(self.name,'GradientBoostingClassifier')
     [self.classes_,unuse,y]=unique(Y);
-    self.classes_=self.classes_';
     y=y';
     self.n_classes_ = length(self.classes_);
 else
@@ -10,4 +9,3 @@ else
     y=Y;
 end
 end
-

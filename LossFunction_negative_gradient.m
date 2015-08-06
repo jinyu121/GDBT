@@ -1,13 +1,14 @@
 function [ ouEstimator ] = LossFunction_negative_gradient( inLossFunction, y, pred,k,sample_weight )
 self=inLossFunction;
+
 switch self.name
     case 'LeastSquaresError'
-        ouEstimator=y - Util_reval(pred);
+        ouEstimator=y - Util_ravel(pred);
     case 'LeastAbsoluteError'
-        pred = Util_reval(pred);
+        pred = Util_ravel(pred);
         ouEstimator =2.0 * (y - pred .* (pred > 0.0)) - 1.0;
     case 'HuberLossFunction'
-        pred = Util_reval(pred);
+        pred = Util_ravel(pred);
         diff = y - pred;
         if isempty(sample_weight)
             gamma = Stats_scoreatpercentile(abs(diff), self.alpha*100);
@@ -22,18 +23,15 @@ switch self.name
         ouEstimator= residual;
     case 'QuantileLossFunction'
         alpha = self.alpha;
-        pred = Util_reval(pred);
+        pred = Util_ravel(pred);
         mask = y > pred;
         ouEstimator=(alpha .* mask) - ((1.0 - alpha) .* ~mask);
     case 'BinomialDeviance'
-        ouEstimator=y-Util_expit(Util_reval(pred));
+        ouEstimator=y-Util_expit(Util_ravel(pred));
     case 'MultinomialDeviance'
-        ouEstimator=y-Util_nan_to_num(exp(pred(:,k)-Util_logsumexp(pred,1,[])));
+        ouEstimator=y-Util_nan_to_num(exp(Util_ravel(pred(:,k))-Util_ravel(Util_logsumexp(pred,1))));
     case 'ExponentialLoss'
         y_ = -(2 .* y - 1);
-        ouEstimator=y_ .*exp(y_ .* Util_reval(pred));
+        ouEstimator=y_ .*exp(y_ .* Util_ravel(pred));
 end
 end
-
-
-

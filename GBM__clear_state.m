@@ -1,5 +1,5 @@
-function self=GBM__clear_state(inself)
-self=inself;
+function self=GBM__clear_state(ingbm)
+self=ingbm;
 %% Clear the state of the gradient boosting model.
 self.estimators_=cell(0,0);
 self.train_score_=[];

@@ -1,5 +1,5 @@
-function self = VerboseReporter_update( inself,j,est )
-self=inself;
+function self = VerboseReporter_update( inVerboseReporter,j,est )
+self=inVerboseReporter;
 % """Update reporter with new iteration. """
 do_oob = (est.subsample < 1);
 i = j - self.begin_at_stage;
@@ -15,4 +15,3 @@ if mod((i + 1) , self.verbose_mod) == 0
     end
 end
 end
-

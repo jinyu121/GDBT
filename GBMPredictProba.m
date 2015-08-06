@@ -1,5 +1,5 @@
-function [ proba ] = GBMPredictProba( inself,X )
-self=inself;
+function [ proba ] = GBMPredictProba( ingbm,X )
+self=ingbm;
 if strcmp(self.name,'GradientBoostingClassifier')
     score=GBM_decision_function(self,X);
     try
@@ -7,7 +7,5 @@ if strcmp(self.name,'GradientBoostingClassifier')
     catch
         error('Some error happened');
     end
-    
 end
 end
-

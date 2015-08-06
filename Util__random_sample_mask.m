@@ -1,4 +1,4 @@
-function [ sample_mask ] = GBM__random_sample_mask( n_total_samples,n_total_in_bag )
+function [ sample_mask ] = Util__random_sample_mask( n_total_samples,n_total_in_bag )
 
 ra=rand(1,n_total_samples);
 sample_mask=zeros(1,n_total_samples);
@@ -10,4 +10,3 @@ for i=1:1:n_total_samples
     end
 end
 end
-

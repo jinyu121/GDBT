@@ -1,5 +1,5 @@
-function [ output_args ] = GBM_staged_decision_function( inself, )
-self=inself;
+function [ output_args ] = GBM_staged_decision_function( ingbm, )
+self=ingbm;
 score = GBM__init_decision_function(self,X);
 
 for i=1:1:Util_shape(self.estimators_,0)
@@ -8,4 +8,3 @@ for i=1:1:Util_shape(self.estimators_,0)
 end
 
 end
-

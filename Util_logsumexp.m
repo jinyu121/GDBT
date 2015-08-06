@@ -1,16 +1,10 @@
-function [ res ] = Util_logsumexp( a,axls,b )
-if isempty(b)
-    b=Util_ones_like(a(:,axls));
-end
+function [ res ] = Util_logsumexp( a,axis )
 
-if isnan(axls)
-    res=log(sum(b.*exp(a(:,axls))));
+res=exp(a);
+if isnan(axis) || isempty(axis)
+    res=sum(Util_real(res));
 else
-    axls=axls+1;
-    res=log(sum(b.*exp(a(:,axls)),axls));
+    res=sum(res,axis+1);
 end
-
-
-
+res=Util_ravel(log(res));
 end
-

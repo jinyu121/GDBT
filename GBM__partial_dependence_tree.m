@@ -35,8 +35,8 @@ for i=1:1:Util_shape(X,0)
                     node_stack(stack_size) = (root_node +current_node.right_child);
                 end
                 stack_size =stack_size+ 1;
-                
-                
+
+
             else
                 node_stack(stack_size) = root_node + current_node.left_child;
                 current_weight = weight_stack(stack_size);
@@ -46,7 +46,7 @@ for i=1:1:Util_shape(X,0)
                 end
                 weight_stack(stack_size) = current_weight .* left_sample_frac;
                 stack_size =stack_size+1;
-                
+
                 node_stack(stack_size) = root_node + current_node.right_child;
                 weight_stack(stack_size) = current_weight .*(1.0 - left_sample_frac);
                 stack_size =stack_size+1;
@@ -58,4 +58,3 @@ if abs(total_weight-1)>0.001
     error('Total weight should be 1.0 but was not');
 end
 end
-

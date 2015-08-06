@@ -20,4 +20,3 @@ switch self.name
         self.scale = 0.5;
 end
 end
-
