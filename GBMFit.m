@@ -2,7 +2,7 @@ function self = GBMFit( ingbm,X,y,sample_weight )
 
 self=ingbm;
 
-y=y'; % To make y as a column-vector
+y=Util_ravel(y);
 
 %% if not warmstart - clear the estimator state
 if ~self.warm_start
@@ -30,11 +30,11 @@ if ~GBM_is_initialized(self)
     % init state
     self=GBM__init_state(self);
     self.init_=EstimatorFit(self.init_,X,y,sample_weight);
-    
+
     % init predictions
     y_pred=EstimatorPredict(self.init_,X);
 
-    begin_at_stage = 0;
+    begin_at_stage = 1;
 else
     if self.n_estimators < Util_shape(self.estimators_,0)
         error('n_estimators must be larger or equal to estimators_.shape')

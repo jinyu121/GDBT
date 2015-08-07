@@ -33,7 +33,7 @@ if self.verbose
 end
 
 % perform boosting iterations
-for i=begin_at_stage+1:1:self.n_estimators
+for i=begin_at_stage:1:self.n_estimators
     %     subsampling
     if do_oob
         sample_mask = Util__random_sample_mask(n_samples, n_inbag);
@@ -43,7 +43,7 @@ for i=begin_at_stage+1:1:self.n_estimators
     
     %     fit next stage of trees
     [self,y_pred] = GBM__fit_stage(self, i, X, y, y_pred, sample_weight,sample_mask, criterion, splitter);
-    
+
     %     track deviance (= loss)
     if do_oob
         self.train_score_(i) = LossFunction__call__(loss_,y(sample_mask),y_pred(sample_mask),sample_weight(sample_mask));

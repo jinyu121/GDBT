@@ -7,7 +7,7 @@ for k=1:1:loss.K
     if loss.is_multi_class
         y=(original_y == k);
     end
-    
+
     residual = LossFunction_negative_gradient(loss,y, y_pred, k,sample_weight);
     
     if self.subsample < 1.0
