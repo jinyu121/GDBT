@@ -26,4 +26,5 @@ gbm=GradientBoostingClassifier('deviance', ...
 gbm=GBMFit(gbm,feature,target,[]);
 
 % Predict
-GBMPredict(gbm,feature(1,:))
+GBMPredict(gbm,feature(1:4,:))
+target(1:4,:)
