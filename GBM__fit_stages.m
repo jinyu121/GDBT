@@ -52,9 +52,9 @@ for i=begin_at_stage:1:self.n_estimators
         %         no need to fancy index w/ no subsampling
         self.train_score_(i) = LossFunction__call__(loss_,y, y_pred, sample_weight);
       end
-%     if self.verbose > 0
-%         [verbose_reporter,self]=VerboseReporter_update(verbose_reporter,i, self);
-%     end
+     if self.verbose > 0
+         [verbose_reporter,self]=VerboseReporter_update(verbose_reporter,i, self);
+     end
 end
 outParameter=i+1;
 end
