@@ -4,16 +4,17 @@ close all;
 clc;
 
 % Load data
-load 'Data_set_seeds_indx_fixed.mat'
+load 'Data_set_pima_indx_fixed.mat'
 
 result=[];
-
+Scale=0.8;
+n_samples=Util_shape(target,0);
+half=int32(n_samples*Scale);
 for i=1:1:10
     fprintf('#%2d\t',i);
-    
-    sets=Dataset_info.indices(i);
-    training=sets.training;
-    test=sets.test;
+    sel=randperm(n_samples);
+    training=sel(1:half);
+    test=sel(half+1:n_samples);
     % The GBM
     gbm=GradientBoostingClassifier('deviance', ...
         0.1,...
@@ -29,28 +30,40 @@ for i=1:1:10
         0,...
         [],...
         true);
-    
     % Train The Model
     fprintf('Training\t');
     gbm=GBMFit(gbm,feature(training,:),target(training,:),[]);
-    
     % Predict
     fprintf('Predicting\t');
     Result_Predict=GBMPredict(gbm,feature(test,:));
     Result_Target=Util_ravel(target(test,:));
-    
     % Calculate the error rate
-    Error_Rate=sum(Result_Predict~=Result_Target)/Util_shape(test,0);
+    Error_Rate=sum(Result_Predict~=Result_Target)/length(test);
     result(i)=1-Error_Rate;
-    
     fprintf('-> %.4f',result(i));
     fprintf('\n')
 end
-
-
 result
 fprintf('Max: %.4f\t Min: %.4f\t Avg: %.4f', ...
     max(result), ...
     min(result), ...
     mean(result));
 fprintf('\n');
+
+% gbm=GradientBoostingClassifier('deviance', ...
+%     0.1,...
+%     5,...
+%     2,...
+%     1,...
+%     0.0,...
+%     3,...
+%     [],...
+%     1.0,...
+%     [],...
+%     0.9,...
+%     0,...
+%     [],...
+%     true);
+% gbm=GBMFit(gbm,feature(1:10,:),target(1:10,:),[]);
+% Result_Predict=GBMPredict(gbm,feature(11:20,:))
+% Util_ravel(target(11:20,:))

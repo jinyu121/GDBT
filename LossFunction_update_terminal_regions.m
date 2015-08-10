@@ -10,20 +10,23 @@ if strcmpi(self.name,'LeastSquaresError')
     y_pred(:, k) = y_pred(:, k)+learning_rate .* Util_ravel(TreePredict(tree,X));
 else
     [foo,terminal_regions]=resubPredict(tree);
-%     terminal_regions = Tree_apply(tree,X);
-
+    %     terminal_regions = Tree_apply(tree,X);
+    
     masked_terminal_regions = terminal_regions;
     masked_terminal_regions(~sample_mask) = -1;
     
     leafLocation=find(tree.IsBranch==0);
     treevalue=tree.CutPoint;
-
+    
     for leaf=1:1:length(leafLocation)
-        [self,treevalue]=LossFunction__update_terminal_region(self,treevalue, masked_terminal_regions, ...
-                leafLocation(leaf), X, y, residual, ...
-                y_pred(:, k), sample_weight);
+        leafLocation(leaf);
+        y_pred(:, k);
+        [self,treevalue]=LossFunction__update_terminal_region( ...
+            self,treevalue, masked_terminal_regions, ...
+            leafLocation(leaf), X, y, residual, ...
+            y_pred(:, k), sample_weight);
     end
     
     y_pred(:, k) = y_pred(:, k)+ (learning_rate .* treevalue(terminal_regions,:));
-
+    
 end

@@ -23,7 +23,7 @@ end
 switch self.name
     case 'HuberLossFunction'
         self.alpha=inalpha;
-        self.gamma=nan;
+        self.gamma=[];
     case 'QuantileLossFunction'
         self.alpha=inalpha;
         if (self.alpha<0 || self.alpha>1)
@@ -34,6 +34,7 @@ switch self.name
         if n_classes ~= 2
             error('BinomialDeviance requires 2 classes.');
         end
+        self.K=1;
     case 'MultinomialDeviance'
         self.is_multi_class = true;
         if n_classes < 3
@@ -43,6 +44,7 @@ switch self.name
         if n_classes ~= 2
             error('ExponentialLoss requires 2 classes.');
         end
+        self.K=1;
 end
 
 end

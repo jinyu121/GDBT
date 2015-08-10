@@ -14,6 +14,6 @@ switch self.name
     case 'MultinomialDeviance'
         ouEstimator=Estimator('PriorProbabilityEstimator',nan);
     case 'ExponentialLoss'
-        ouEstimator=Estimeter('ScaledLogOddsEstimator',nan);
+        ouEstimator=Estimator('ScaledLogOddsEstimator',nan);
 end
 end

@@ -27,6 +27,9 @@ switch self.name
         mask = y > pred;
         ouEstimator=(alpha .* mask) - ((1.0 - alpha) .* ~mask);
     case 'BinomialDeviance'
+        if max(y)==2
+            y=y-1;
+        end
         ouEstimator=y-Util_expit(Util_ravel(pred));
     case 'MultinomialDeviance'
         ouEstimator=y-Util_nan_to_num(exp(Util_ravel(pred(:,k))-Util_ravel(Util_logsumexp(pred,1))));

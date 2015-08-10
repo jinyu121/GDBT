@@ -18,12 +18,16 @@ switch self.name
         end
 
     case 'LogOddsEstimator'
+        % For fixing the difference between Matlab and Python
+        if max(y)==2
+            y=y-1;
+        end
         if isempty(sample_weight)
             pos = sum(y);
-            neg =Util_shape( y,0)- pos;
+            neg =Util_shape(y,0)- pos;
         else
-            pos = sum(sample_weight * y);
-            neg = sum(sample_weight * (1 - y));
+            pos = sum(sample_weight .* y);
+            neg = sum(sample_weight .* (1-y));
         end
         if neg == 0 || pos == 0
             error('y contains non binary labels.')
@@ -31,12 +35,16 @@ switch self.name
         self.prior = self.scale * log(pos / neg);
 
     case 'ScaledLogOddsEstimator'
+        % For fixing the difference between Matlab and Python
+        if max(y)==2
+            y=y-1;
+        end
         if isempty(sample_weight)
             pos = sum(y);
             neg =Util_shape( y,0)- pos;
         else
-            pos = sum(sample_weight * y);
-            neg = sum(sample_weight * (1 - y));
+            pos = sum(sample_weight .* y);
+            neg = sum(sample_weight .* (1 - y));
         end
         if neg == 0 || pos == 0
             error('y contains non binary labels.')

@@ -12,6 +12,9 @@ switch self.name
         y=y.*self.mean;
 
     case 'LogOddsEstimator'
+        if max(y)==2
+            y=y-1;
+        end
         y=y.*self.prior;
 
     case 'ScaledLogOddsEstimator'

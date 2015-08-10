@@ -9,5 +9,8 @@ switch self.name
         [foo,ret]=max(proba');
     case 'ExponentialLoss'
         ret= (Util_ravel(score) >= 0.0);
+        if min(ret)==0
+            ret=ret+1;
+        end
 end
 end

@@ -60,7 +60,7 @@ switch self.name
             ouEstimator= -2.0 .* mean((y .* pred) - Util_logaddexp(0.0, pred));
         else
             ouEstimator= (-2.0 / sum(sample_weight) .* ...
-                    sum(sample_weight * ((y * pred) - Util_logaddexp(0.0, pred))));
+                    sum(sample_weight .* ((y .* pred) - Util_logaddexp(0.0, pred))));
         end
     case 'MultinomialDeviance'
         %         # create one-hot label encoding
@@ -78,8 +78,8 @@ switch self.name
         if isempty(sample_weight)
             ouEstimator= mean(exp(-(2. * y - 1.) * pred));
         else
-            ouEstimator= (1.0 / sum(sample_weight)) * ...
-                            sum(sample_weight * exp(-(2 * y - 1) * pred));
+            ouEstimator= (1.0 ./ sum(sample_weight)) * ...
+                            sum(sample_weight .* exp(-(2 * y - 1) .* pred));
         end
 end
 

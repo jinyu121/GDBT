@@ -9,7 +9,7 @@ for k=1:1:loss.K
     end
 
     residual = LossFunction_negative_gradient(loss,y, y_pred, k,sample_weight);
-    
+
     if self.subsample < 1.0
         sample_weight = sample_weight .* sample_mask;
     end
